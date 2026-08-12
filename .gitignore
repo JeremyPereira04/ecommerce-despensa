@@ -1,0 +1,24 @@
+# Real environment variables
+.env
+
+# Real database configuration
+config/database.php
+
+# Composer dependencies
+/vendor/
+
+# Runtime logs
+storage/logs/*
+!storage/logs/.gitkeep
+
+# User uploads
+storage/uploads/*
+!storage/uploads/.gitkeep
+
+# Editors
+.vscode/
+.idea/
+
+# Operating systems
+.DS_Store
+Thumbs.db
