@@ -1,3 +1,1 @@
-<?php
-
-?>
+<section class="section"><div class="container"><?php $emptyTitle = 'Detalle de pedido no disponible'; $emptyText = 'Esta vista debe recibir un pedido autorizado para el usuario autenticado.'; $emptyActionUrl = url('orders'); $emptyActionLabel = 'Volver a pedidos'; require dirname(__DIR__) . '/components/empty-state.php'; ?></div></section>

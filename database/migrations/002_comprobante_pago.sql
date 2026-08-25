@@ -1,0 +1,3 @@
+BEGIN;
+ALTER TABLE pagos ADD COLUMN IF NOT EXISTS comprobante_archivo VARCHAR(255);
+COMMIT;

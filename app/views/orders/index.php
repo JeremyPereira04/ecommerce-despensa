@@ -1,3 +1,1 @@
-<?php
-
-?>
+<section class="page-hero page-hero--compact"><div class="container"><span class="section-kicker">Tu actividad</span><h1>Mis pedidos</h1><p>El historial aparecerá cuando la autenticación y la consulta por usuario estén implementadas.</p></div></section><section class="section"><div class="container"><?php $emptyTitle = 'Todavía no podemos mostrar pedidos'; $emptyText = 'Esta pantalla necesita una sesión autenticada y validación de propiedad en el servidor para evitar accesos indebidos.'; $emptyActionUrl = url('products'); $emptyActionLabel = 'Explorar productos'; require dirname(__DIR__) . '/components/empty-state.php'; ?></div></section>

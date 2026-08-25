@@ -1,43 +1,42 @@
-# E-commerce para despensa
+# Ecommerce “Despensa Para Todos”
 
-Sistema de comercio electrónico para una despensa o comercio pequeño.
+Aplicación PHP 8.2+ con PostgreSQL. El directorio público del servidor web debe ser `public/`, no la raíz del proyecto.
 
-## Objetivo
+## Configuración local
 
-Permitir que los clientes consulten productos, los agreguen al carrito y realicen pedidos. El administrador podrá gestionar productos, categorías, stock y pedidos.
+1. Copiá `.env.example` fuera de cualquier commit y cargá sus valores como variables de entorno.
+2. Creá la base PostgreSQL y ejecutá `database/schema.postgresql.sql`.
+3. Creá un usuario con `rol = 'ADMIN'`, correo en minúsculas y un valor temporal en `contrasena_hash`.
+4. Definí `ADMIN_EMAIL` y `ADMIN_PASSWORD`, y ejecutá:
 
-## Tecnologías
+   ```powershell
+   php scripts/set_admin_password.php
+   ```
 
-- PHP
-- PostgreSQL
-- HTML
-- CSS
-- Bootstrap
-- JavaScript
-- Git y GitHub
+   El script genera el hash con `password_hash(PASSWORD_DEFAULT)`. La contraseña en texto plano nunca debe guardarse en SQL, PHP ni Git.
 
-## Funcionalidades previstas
+5. Iniciá la aplicación desde esta carpeta:
 
-- Catálogo de productos.
-- Categorías.
-- Registro e inicio de sesión.
-- Carrito de compras.
-- Creación de pedidos.
-- Control de stock.
-- Panel administrativo.
+   ```powershell
+   php -S 127.0.0.1:8080 -t public
+   ```
 
-## Estructura
+## Verificación
 
-- `app/controllers`: procesa las solicitudes.
-- `app/models`: representa los datos y accede a PostgreSQL.
-- `app/views`: contiene las vistas HTML y Bootstrap.
-- `config`: configuración de la aplicación.
-- `database`: estructura y datos iniciales de PostgreSQL.
-- `public`: punto de entrada y recursos públicos.
-- `routes`: definición de rutas.
-- `storage`: registros y archivos cargados.
-- `docs`: documentación y diagramas.
+```powershell
+Get-ChildItem -Recurse -Filter *.php | ForEach-Object { php -l $_.FullName }
+php tests/test_admin_auth.php
+php tests/test_dashboard.php
+```
 
-## Estado
+## API administrativa
 
-Proyecto en desarrollo.
+- `GET /api/admin/dashboard/stats`
+- `GET /api/admin/orders/recent?limit=10` (`limit` entre 1 y 50)
+
+Ambos endpoints requieren una sesión de administrador activo. Aplicá primero
+`database/migrations/001_completar_modelo_comercial.sql`. En desarrollo el rate
+limit usa archivos bajo `storage/rate-limits`; en producción con varias instancias
+debe reemplazarse por Redis u otro almacenamiento compartido.
+
+En producción, usá HTTPS, credenciales distintas por ambiente, backups automáticos y un usuario PostgreSQL con permisos mínimos. Conservá `storage/sessions` fuera de almacenamiento compartido o reemplazalo por Redis cuando haya más de una instancia web.

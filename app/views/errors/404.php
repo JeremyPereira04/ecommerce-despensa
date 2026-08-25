@@ -1,0 +1,1 @@
+<section class="section"><div class="container"><?php $emptyTitle = 'Esta página no existe'; $emptyText = 'Revisá la dirección o volvé al catálogo para seguir comprando.'; $emptyActionUrl = url('home'); $emptyActionLabel = 'Volver al inicio'; require dirname(__DIR__) . '/components/empty-state.php'; ?></div></section>

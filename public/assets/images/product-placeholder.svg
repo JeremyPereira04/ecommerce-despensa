@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800" role="img" aria-labelledby="title description">
+  <title id="title">Imagen de producto no disponible</title>
+  <desc id="description">Ilustración abstracta de una bolsa de compras</desc>
+  <rect width="800" height="800" fill="#f1f5ed"/>
+  <circle cx="620" cy="170" r="120" fill="#dce9d3"/>
+  <circle cx="170" cy="650" r="170" fill="#e8efe3"/>
+  <path d="M242 278h316l-25 342H267l-25-342Z" fill="#fff" stroke="#18634b" stroke-width="18" stroke-linejoin="round"/>
+  <path d="M322 324v-62c0-50 35-90 78-90s78 40 78 90v62" fill="none" stroke="#18634b" stroke-width="18" stroke-linecap="round"/>
+  <path d="M360 412c42-26 91-22 126 12-24 57-77 88-134 77-3-36 0-61 8-89Z" fill="#f1b24a"/>
+  <path d="M406 465c10-50 43-88 93-108" fill="none" stroke="#18634b" stroke-width="14" stroke-linecap="round"/>
+</svg>

@@ -22,3 +22,19 @@ storage/uploads/*
 # Operating systems
 .DS_Store
 Thumbs.db
+
+# Local sessions
+storage/sessions/*
+!storage/sessions/.gitkeep
+
+# Runtime data and private customer files
+storage/rate-limits/*
+!storage/rate-limits/.gitkeep
+storage/payment-proofs/*
+!storage/payment-proofs/.gitkeep
+public/uploads/*
+!public/uploads/.gitkeep
+
+# Local database credentials
+config/database.php
+.env

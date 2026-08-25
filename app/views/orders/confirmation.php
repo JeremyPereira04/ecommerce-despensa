@@ -1,3 +1,1 @@
-<?php
-
-?>
+<section class="section"><div class="container narrow-container"><div class="order-confirmation"><span class="order-confirmation__icon">✓</span><span class="section-kicker">Pedido recibido</span><h1>¡Gracias por tu compra!</h1><p>Tu pedido <strong>#<?=e($order['id_pedido'])?></strong> fue registrado correctamente.</p><dl><div><dt>Estado del pedido</dt><dd><?=e($order['estado'])?></dd></div><div><dt>Forma de pago</dt><dd><?=e($order['metodo'])?></dd></div><div><dt>Estado del pago</dt><dd><?=e($order['pago_estado'])?></dd></div><div><dt>Total</dt><dd><?=e(money($order['total']))?></dd></div></dl><p>La tienda confirmará el pedido y el pago según el método seleccionado.</p><a class="btn btn-primary" href="<?=e(url('home'))?>">Volver a la tienda</a></div></div></section>
