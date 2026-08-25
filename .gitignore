@@ -1,0 +1,13 @@
+.env
+.env.*
+!.env.example
+
+frontend-redesign-staging/storage/sessions/*
+!frontend-redesign-staging/storage/sessions/.gitkeep
+frontend-redesign-staging/sessions-preview/
+
+*.log
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

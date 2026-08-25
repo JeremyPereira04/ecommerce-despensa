@@ -1,0 +1,1 @@
+<section class="section"><div class="container"><?php $emptyTitle = 'Confirmación pendiente de integración'; $emptyText = 'La confirmación solo debe mostrarse después de crear un pedido válido en el servidor.'; $emptyActionUrl = url('home'); $emptyActionLabel = 'Volver al inicio'; require dirname(__DIR__) . '/components/empty-state.php'; ?></div></section>
