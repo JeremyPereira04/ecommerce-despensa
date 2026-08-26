@@ -39,6 +39,22 @@ function product_image(?string $path): string
     return asset($normalized ?: 'assets/images/product-placeholder.svg');
 }
 
+function category_image(?string $path): string
+{
+    $fallback = 'assets/images/categories/category-placeholder.svg';
+    if ($path === null || trim($path) === '') {
+        return asset($fallback);
+    }
+
+    $normalized = str_replace('\\', '/', trim($path));
+    $normalized = preg_replace('#^/?(?:public/)?#', '', $normalized) ?? '';
+    if (!preg_match('#^assets/images/categories/[a-zA-Z0-9._-]+$#', $normalized)) {
+        return asset($fallback);
+    }
+
+    return asset($normalized);
+}
+
 function money(int|float|string|null $amount): string
 {
     return number_format((float) $amount, 0, ',', '.') . ' Gs.';

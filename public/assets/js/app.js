@@ -38,4 +38,29 @@
             }
         }, { once: true });
     });
+
+    document.querySelectorAll('[data-horizontal-carousel]').forEach((carousel) => {
+        const viewport = carousel.querySelector('[data-carousel-viewport]');
+        const previous = carousel.querySelector('[data-carousel-previous]');
+        const next = carousel.querySelector('[data-carousel-next]');
+        if (!(viewport instanceof HTMLElement)) return;
+
+        const updateControls = () => {
+            const maximum = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
+            if (previous instanceof HTMLButtonElement) previous.disabled = viewport.scrollLeft <= 8;
+            if (next instanceof HTMLButtonElement) next.disabled = viewport.scrollLeft >= maximum - 2;
+        };
+        const move = (direction) => viewport.scrollBy({ left: direction * Math.max(220, viewport.clientWidth * .82), behavior: 'smooth' });
+
+        previous?.addEventListener('click', () => move(-1));
+        next?.addEventListener('click', () => move(1));
+        viewport.addEventListener('scroll', updateControls, { passive: true });
+        viewport.addEventListener('keydown', (event) => {
+            if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+            event.preventDefault();
+            move(event.key === 'ArrowRight' ? 1 : -1);
+        });
+        window.addEventListener('resize', updateControls);
+        updateControls();
+    });
 })();

@@ -15,11 +15,11 @@ final class Category
         }
 
         $statement = $this->connection->query(
-            'SELECT c.id_categoria, c.nombre, c.descripcion, COUNT(p.id_producto) AS productos_count
+            'SELECT c.id_categoria, c.nombre, c.descripcion, c.imagen, COUNT(p.id_producto) AS productos_count
              FROM categorias c
              LEFT JOIN productos p ON p.id_categoria = c.id_categoria AND p.activo = TRUE
              WHERE c.activo = TRUE
-             GROUP BY c.id_categoria, c.nombre, c.descripcion
+             GROUP BY c.id_categoria, c.nombre, c.descripcion, c.imagen
              ORDER BY c.nombre ASC'
         );
 

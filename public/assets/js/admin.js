@@ -62,17 +62,82 @@
         return node.innerHTML;
     };
 
+    document.querySelectorAll('img[data-image-fallback]').forEach((image) => {
+        image.addEventListener('error', () => {
+            const fallback = image.dataset.imageFallback;
+            if (fallback && image.src !== fallback) image.src = fallback;
+        }, { once: true });
+    });
+
     const categoryForm = document.querySelector('[data-category-form]');
+    const categoryPreview = document.querySelector('[data-category-image-preview]');
+    const categoryImageInput = document.querySelector('[data-category-image-input]');
+    const categoryImageError = document.querySelector('[data-category-image-error]');
+    const categoryTitle = document.querySelector('[data-category-modal-title]');
+    const defaultCategoryImage = categoryPreview?.querySelector('img')?.src || '';
+    let categoryPreviewUrl = '';
+
+    const showCategoryPreview = (source) => {
+        if (!categoryPreview) return;
+        if (categoryPreviewUrl && categoryPreviewUrl !== source) {
+            URL.revokeObjectURL(categoryPreviewUrl);
+            categoryPreviewUrl = '';
+        }
+        categoryPreview.innerHTML = '';
+        const image = document.createElement('img');
+        image.src = source || defaultCategoryImage;
+        image.alt = 'Vista previa de la categoría';
+        categoryPreview.append(image);
+    };
+
+    const resetCategoryImageValidation = () => {
+        if (categoryImageInput instanceof HTMLInputElement) {
+            categoryImageInput.value = '';
+            categoryImageInput.setCustomValidity('');
+        }
+        if (categoryImageError) categoryImageError.textContent = '';
+    };
+
     document.querySelectorAll('[data-category-edit]').forEach((button) => button.addEventListener('click', () => {
         if (!(categoryForm instanceof HTMLFormElement)) return;
         categoryForm.action = `${categoryForm.dataset.updateAction}&id=${encodeURIComponent(button.dataset.id || '')}`;
         categoryForm.elements.nombre.value = button.dataset.name || '';
         categoryForm.elements.descripcion.value = button.dataset.description || '';
+        if (categoryForm.elements.activo instanceof HTMLInputElement) categoryForm.elements.activo.checked = button.dataset.active === '1';
+        resetCategoryImageValidation();
+        showCategoryPreview(button.dataset.imageUrl || defaultCategoryImage);
+        if (categoryTitle) categoryTitle.textContent = 'Editar categoría';
     }));
-    document.querySelector('[data-bs-target="#categoryModal"]:not([data-category-edit])')?.addEventListener('click', () => {
+    document.querySelector('[data-category-create]')?.addEventListener('click', () => {
         if (!(categoryForm instanceof HTMLFormElement)) return;
         categoryForm.action = categoryForm.dataset.createAction || '';
         categoryForm.reset();
+        if (categoryForm.elements.activo instanceof HTMLInputElement) categoryForm.elements.activo.checked = true;
+        resetCategoryImageValidation();
+        showCategoryPreview(defaultCategoryImage);
+        if (categoryTitle) categoryTitle.textContent = 'Nueva categoría';
+    });
+
+    categoryImageInput?.addEventListener('change', () => {
+        if (!(categoryImageInput instanceof HTMLInputElement)) return;
+        const file = categoryImageInput.files?.[0];
+        categoryImageInput.setCustomValidity('');
+        if (categoryImageError) categoryImageError.textContent = '';
+        if (!file) return;
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+        const maxSize = Number.parseInt(categoryImageInput.dataset.maxSize || '2097152', 10);
+        let message = '';
+        if (!allowedTypes.includes(file.type)) message = 'Seleccioná una imagen JPG, JPEG, PNG o WebP.';
+        else if (file.size > maxSize) message = 'La imagen supera el máximo de 2 MB.';
+        if (message) {
+            categoryImageInput.setCustomValidity(message);
+            if (categoryImageError) categoryImageError.textContent = message;
+            categoryImageInput.reportValidity();
+            return;
+        }
+        const nextPreviewUrl = URL.createObjectURL(file);
+        showCategoryPreview(nextPreviewUrl);
+        categoryPreviewUrl = nextPreviewUrl;
     });
 
     document.querySelector('[data-admin-menu]')?.addEventListener('click', (event) => {

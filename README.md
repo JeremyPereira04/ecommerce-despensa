@@ -27,7 +27,12 @@ Aplicación PHP 8.2+ con PostgreSQL. El directorio público del servidor web deb
 Get-ChildItem -Recurse -Filter *.php | ForEach-Object { php -l $_.FullName }
 php tests/test_admin_auth.php
 php tests/test_dashboard.php
+php tests/test_category_images.php
 ```
+
+## Imágenes de categorías
+
+En instalaciones existentes, ejecutá `database/migrations/003_categoria_imagen.sql` antes de usar el formulario administrativo. La migración agrega `categorias.imagen VARCHAR(255)` de forma idempotente. Los archivos se validan en PHP y se guardan bajo `public/assets/images/categories/`; PostgreSQL conserva solamente la ruta relativa.
 
 ## API administrativa
 

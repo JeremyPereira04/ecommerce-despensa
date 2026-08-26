@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" aria-labelledby="title description">
+  <title id="title">Categoría sin imagen</title>
+  <desc id="description">Ilustración de una canasta de compras</desc>
+  <rect width="320" height="240" rx="28" fill="#f3f6f9"/>
+  <circle cx="160" cy="112" r="66" fill="#dff6f2"/>
+  <g fill="none" stroke="#0b1f3a" stroke-linecap="round" stroke-linejoin="round" stroke-width="8">
+    <path d="M104 102h112l-12 70h-88l-12-70Z"/>
+    <path d="m132 102 28-38 28 38"/>
+    <path d="M137 122v28M160 122v28M183 122v28"/>
+  </g>
+  <circle cx="126" cy="184" r="8" fill="#f5b642"/>
+  <circle cx="194" cy="184" r="8" fill="#f5b642"/>
+</svg>

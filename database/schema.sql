@@ -21,6 +21,7 @@ CREATE TABLE categorias (
     id_categoria INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL UNIQUE,
     descripcion TEXT,
+    imagen VARCHAR(255),
     activo BOOLEAN NOT NULL DEFAULT TRUE
 );
 

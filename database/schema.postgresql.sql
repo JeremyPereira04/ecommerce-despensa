@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS categorias (
     id_categoria BIGSERIAL PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL UNIQUE,
     descripcion TEXT,
+    imagen VARCHAR(255),
     activo BOOLEAN NOT NULL DEFAULT TRUE,
     fecha_creacion TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

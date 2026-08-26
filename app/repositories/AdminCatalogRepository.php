@@ -20,6 +20,14 @@ final class AdminCatalogRepository
         return $this->db->query('SELECT c.*, COUNT(p.id_producto) AS productos_count FROM categorias c LEFT JOIN productos p ON p.id_categoria=c.id_categoria GROUP BY c.id_categoria ORDER BY c.nombre')->fetchAll();
     }
 
+    public function categoria(int $id): ?array
+    {
+        $q=$this->db->prepare('SELECT * FROM categorias WHERE id_categoria=:id');
+        $q->execute(['id'=>$id]);
+        $row=$q->fetch();
+        return is_array($row)?$row:null;
+    }
+
     public function guardarProducto(array $p, ?int $id): int
     {
         if ($id===null) {
@@ -35,10 +43,10 @@ final class AdminCatalogRepository
         $q=$this->db->prepare('UPDATE productos SET activo=NOT activo, fecha_actualizacion=CURRENT_TIMESTAMP WHERE id_producto=:id');$q->execute(['id'=>$id]);
     }
 
-    public function guardarCategoria(array $c, ?int $id): void
+    public function guardarCategoria(array $c, ?int $id): int
     {
-        if($id===null){$q=$this->db->prepare('INSERT INTO categorias(nombre,descripcion,activo) VALUES(:nombre,:descripcion,TRUE)');$q->execute($c);return;}
-        $c['id']=$id;$q=$this->db->prepare('UPDATE categorias SET nombre=:nombre,descripcion=:descripcion WHERE id_categoria=:id');$q->execute($c);
+        if($id===null){$q=$this->db->prepare('INSERT INTO categorias(nombre,descripcion,imagen,activo) VALUES(:nombre,:descripcion,:imagen,:activo) RETURNING id_categoria');$q->execute($c);return (int)$q->fetchColumn();}
+        $c['id']=$id;$q=$this->db->prepare('UPDATE categorias SET nombre=:nombre,descripcion=:descripcion,imagen=:imagen,activo=:activo WHERE id_categoria=:id RETURNING id_categoria');$q->execute($c);return (int)$q->fetchColumn();
     }
 
     public function cambiarCategoria(int $id): void

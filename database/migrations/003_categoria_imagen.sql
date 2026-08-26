@@ -1,0 +1,6 @@
+BEGIN;
+
+ALTER TABLE categorias
+    ADD COLUMN IF NOT EXISTS imagen VARCHAR(255);
+
+COMMIT;
