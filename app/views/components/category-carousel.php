@@ -3,9 +3,10 @@ $categoryCarouselTitle = $categoryCarouselTitle ?? 'Comprá por categoría';
 $categoryCarouselKicker = $categoryCarouselKicker ?? 'Encontrá rápido';
 $categoryCarouselId = $categoryCarouselId ?? 'category-carousel-title';
 $selectedCategoryId = $categoryId ?? null;
+$categoryCarouselCompact = $categoryCarouselCompact ?? false;
 ?>
 <?php if (!empty($categories)): ?>
-    <div class="catalog-category-carousel" aria-labelledby="<?= e($categoryCarouselId) ?>" data-horizontal-carousel>
+    <div class="catalog-category-carousel<?= $categoryCarouselCompact ? ' catalog-category-carousel--compact' : '' ?>" aria-labelledby="<?= e($categoryCarouselId) ?>" data-horizontal-carousel>
         <div class="catalog-category-carousel__heading">
             <div><span class="section-kicker"><?= e($categoryCarouselKicker) ?></span><h2 id="<?= e($categoryCarouselId) ?>"><?= e($categoryCarouselTitle) ?></h2></div>
             <div class="carousel-controls"><button type="button" data-carousel-previous aria-label="Ver categorías anteriores">‹</button><button type="button" data-carousel-next aria-label="Ver categorías siguientes">›</button></div>

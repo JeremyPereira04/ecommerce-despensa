@@ -2,8 +2,9 @@
 $productId = (int) ($product['id_producto'] ?? 0);
 $stock = (int) ($product['stock'] ?? 0);
 $productName = (string) ($product['nombre'] ?? 'Producto');
+$productCardCompact = $productCardCompact ?? false;
 ?>
-<article class="product-card h-100">
+<article class="product-card<?= $productCardCompact ? ' product-card--compact' : '' ?> h-100">
     <a class="product-card__media" href="<?= e(url('product', ['id' => $productId])) ?>" tabindex="-1" aria-hidden="true">
         <img src="<?= e(product_image($product['imagen'] ?? null)) ?>" alt="" width="360" height="360" loading="lazy" data-image-fallback="<?= e(asset('assets/images/product-placeholder.svg')) ?>">
         <?php if ($stock < 1): ?><span class="stock-badge stock-badge--out">Sin stock</span><?php endif; ?>
@@ -27,6 +28,7 @@ $productName = (string) ($product['nombre'] ?? 'Producto');
                 <input type="hidden" name="quantity" value="1">
                 <button class="btn btn-primary btn-icon" type="submit" <?= $stock < 1 ? 'disabled' : '' ?> aria-label="Agregar <?= e($productName) ?> al carrito">
                     <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.9a2 2 0 0 0 2-1.6L20.5 8H6M12 9v5M9.5 11.5h5"/></svg>
+                    <?php if ($productCardCompact): ?><span>Añadir</span><?php endif; ?>
                 </button>
             </form>
         </div>

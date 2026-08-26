@@ -2,7 +2,9 @@
 $pageTitle = $pageTitle ?? 'Despensa Para Todos';
 $pageDescription = $pageDescription ?? 'Tu compra cotidiana, simple y cerca.';
 $bodyClass = $bodyClass ?? '';
-$brandLogoPath = 'assets/images/logo-despensa-para-todos-transparent.png';
+$brandLogoPath = $bodyClass === 'page-home'
+    ? 'assets/images/logo-despensa-para-todos.png'
+    : 'assets/images/logo-despensa-para-todos-transparent.png';
 $brandLogoExists = is_file(dirname(__DIR__, 3) . '/public/' . $brandLogoPath);
 ?>
 <!doctype html>

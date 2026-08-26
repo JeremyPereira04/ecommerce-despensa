@@ -15,7 +15,7 @@ $offersUrl = $currentPage === 'home' ? '#offers-banner' : url('home') . '#offers
         <div class="container utility-bar__content">
             <span><i class="bi bi-geo-alt" aria-hidden="true"></i><?= e($deliveryArea) ?></span>
             <span><i class="bi bi-truck" aria-hidden="true"></i><?= e($deliveryMessage) ?></span>
-            <span class="utility-bar__links"><a href="<?= e($phoneHref) ?>"><i class="bi bi-telephone" aria-hidden="true"></i><?= e($phoneDisplay) ?></a><a href="<?= e($helpUrl) ?>" target="_blank" rel="noopener noreferrer">Ayuda</a></span>
+            <span class="utility-bar__links"><a href="<?= e($phoneHref) ?>"><i class="bi bi-whatsapp" aria-hidden="true"></i><?= e($phoneDisplay) ?></a><a href="<?= e($helpUrl) ?>" target="_blank" rel="noopener noreferrer">Ayuda</a></span>
         </div>
     </div>
     <nav class="navbar navbar-expand-lg" aria-label="Navegación principal">
@@ -45,12 +45,12 @@ $offersUrl = $currentPage === 'home' ? '#offers-banner' : url('home') . '#offers
                     <label class="visually-hidden" for="header-search">Buscar productos</label>
                     <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
                     <input id="header-search" name="q" type="search" maxlength="120" placeholder="¿Qué necesitás hoy?" value="<?= e($_GET['q'] ?? '') ?>">
-                    <button type="submit">Buscar</button>
+                    <button type="submit"><i class="bi bi-search" aria-hidden="true"></i><span class="visually-hidden">Buscar</span></button>
                 </form>
                 <ul class="navbar-nav nav-links">
-                    <li class="nav-item"><a class="nav-link <?= $currentPage === 'home' ? 'active' : '' ?>" href="<?= e(url('home')) ?>">Inicio</a></li>
+                    <li class="nav-item nav-item--home"><a class="nav-link <?= $currentPage === 'home' ? 'active' : '' ?>" href="<?= e(url('home')) ?>">Inicio</a></li>
                     <li class="nav-item dropdown"><button class="nav-link dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Categorías</button><ul class="dropdown-menu"><li><a class="dropdown-item" href="<?= e(url('categories')) ?>">Ver todas</a></li><?php foreach (array_slice($navigationCategories, 0, 10) as $navigationCategory): ?><li><a class="dropdown-item" href="<?= e(url('products', ['category' => (int) $navigationCategory['id_categoria']])) ?>"><?= e($navigationCategory['nombre']) ?></a></li><?php endforeach; ?></ul></li>
-                    <li class="nav-item"><a class="nav-link <?= $currentPage === 'products' ? 'active' : '' ?>" href="<?= e(url('products')) ?>">Productos</a></li>
+                    <li class="nav-item nav-item--products"><a class="nav-link <?= $currentPage === 'products' ? 'active' : '' ?>" href="<?= e(url('products')) ?>">Productos</a></li>
                     <li class="nav-item"><a class="nav-link" href="<?= e($offersUrl) ?>">Ofertas</a></li>
                     <?php if ($administrator): ?><li class="nav-item"><a class="nav-link" href="<?= e(url('admin-dashboard')) ?>">Administración</a></li><?php endif; ?>
                 </ul>

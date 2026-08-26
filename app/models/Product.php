@@ -28,6 +28,31 @@ final class Product
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function heroSelection(int $limit = 6): array
+    {
+        if ($this->connection === null) {
+            return [];
+        }
+
+        $statement = $this->connection->prepare(
+            'SELECT ranked.*
+             FROM (
+                 SELECT p.*, c.nombre AS categoria_nombre,
+                        ROW_NUMBER() OVER (PARTITION BY p.id_categoria ORDER BY p.fecha_creacion DESC, p.id_producto DESC) AS category_position
+                 FROM productos p
+                 INNER JOIN categorias c ON c.id_categoria = p.id_categoria
+                 WHERE p.activo = TRUE AND c.activo = TRUE AND p.stock > 0
+             ) ranked
+             WHERE ranked.category_position = 1
+             ORDER BY ranked.id_categoria ASC
+             LIMIT :limit'
+        );
+        $statement->bindValue(':limit', max(1, min($limit, 8)), PDO::PARAM_INT);
+        $statement->execute();
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function catalog(string $search = '', ?int $categoryId = null, string $sort = 'recent'): array
     {
         if ($this->connection === null) {
