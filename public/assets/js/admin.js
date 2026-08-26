@@ -140,6 +140,61 @@
         categoryPreviewUrl = nextPreviewUrl;
     });
 
+    const advertisementInput = document.querySelector('[data-advertisement-input]');
+    const advertisementPreview = document.querySelector('[data-advertisement-preview]');
+    const advertisementError = document.querySelector('[data-advertisement-error]');
+    let advertisementPreviewUrl = '';
+    advertisementInput?.addEventListener('change', () => {
+        if (!(advertisementInput instanceof HTMLInputElement)) return;
+        const file = advertisementInput.files?.[0];
+        advertisementInput.setCustomValidity('');
+        if (advertisementError) advertisementError.textContent = '';
+        if (!file) return;
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+        const maximum = Number.parseInt(advertisementInput.dataset.maxSize || '5242880', 10);
+        let message = '';
+        if (!allowedTypes.includes(file.type)) message = 'Seleccioná una imagen JPG, JPEG, PNG o WebP.';
+        else if (file.size > maximum) message = 'La publicidad supera el máximo de 5 MB.';
+        if (message) {
+            advertisementInput.setCustomValidity(message);
+            if (advertisementError) advertisementError.textContent = message;
+            advertisementInput.reportValidity();
+            return;
+        }
+
+        const nextUrl = URL.createObjectURL(file);
+        const probe = new Image();
+        advertisementInput.setCustomValidity('Validando dimensiones de la imagen…');
+        probe.addEventListener('load', () => {
+            const ratio = probe.naturalWidth / Math.max(1, probe.naturalHeight);
+            if (probe.naturalWidth < 1200 || probe.naturalHeight < 400 || ratio < 1.8 || ratio > 3.2) {
+                message = 'Usá una imagen horizontal de al menos 1200 × 400 px, idealmente 1920 × 720 px.';
+                advertisementInput.setCustomValidity(message);
+                if (advertisementError) advertisementError.textContent = message;
+                URL.revokeObjectURL(nextUrl);
+                advertisementInput.reportValidity();
+                return;
+            }
+            advertisementInput.setCustomValidity('');
+            if (advertisementPreviewUrl) URL.revokeObjectURL(advertisementPreviewUrl);
+            advertisementPreviewUrl = nextUrl;
+            if (advertisementPreview) {
+                advertisementPreview.innerHTML = '';
+                const image = document.createElement('img');
+                image.src = nextUrl;
+                image.alt = 'Vista previa de la publicidad';
+                advertisementPreview.append(image);
+            }
+        });
+        probe.addEventListener('error', () => {
+            message = 'No se pudo leer la imagen seleccionada.';
+            advertisementInput.setCustomValidity(message);
+            if (advertisementError) advertisementError.textContent = message;
+            URL.revokeObjectURL(nextUrl);
+        });
+        probe.src = nextUrl;
+    });
+
     document.querySelector('[data-admin-menu]')?.addEventListener('click', (event) => {
         const open = body.classList.toggle('admin-menu-open');
         event.currentTarget.setAttribute('aria-expanded', String(open));

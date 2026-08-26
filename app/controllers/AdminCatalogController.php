@@ -32,9 +32,26 @@ final class AdminCatalogController
         }
         header('Location: '.url('admin-categories'),true,303);exit;
     }
+    public function guardarPublicidad():never
+    {
+        require_admin();$this->csrf();
+        $newImage=null;
+        try{
+            $current=$this->service->publicidad();
+            $newImage=$this->uploadImage('assets/images/advertising',5*1024*1024,1200,400,1.8,3.2);
+            $this->service->guardarPublicidad($_POST,$newImage);
+            if($newImage!==null&&!empty($current['imagen'])&&$current['imagen']!==$newImage){$this->deleteManagedFile((string)$current['imagen'],'assets/images/advertising');}
+            flash('success','Publicidad principal actualizada correctamente.');
+        }catch(Throwable $e){
+            if($newImage!==null){$this->deleteManagedFile($newImage,'assets/images/advertising');}
+            error_log('Advertisement persistence: '.$e->getMessage());
+            flash('danger',$e instanceof InvalidArgumentException?$e->getMessage():'No se pudo guardar la publicidad principal.');
+        }
+        header('Location: '.url('admin-settings'),true,303);exit;
+    }
     public function cambiar(string $type,int $id):never{require_admin();$this->csrf();$type==='producto'?$this->service->cambiarProducto($id):$this->service->cambiarCategoria($id);flash('success','Estado actualizado.');header('Location: '.url($type==='producto'?'admin-products':'admin-categories'),true,303);exit;}
     private function csrf():void{if(!verify_csrf($_POST['csrf_token']??null)){http_response_code(403);exit('Solicitud inválida.');}}
-    private function uploadImage(string $relativeDirectory,int $maxBytes):?string
+    private function uploadImage(string $relativeDirectory,int $maxBytes,int $minWidth=0,int $minHeight=0,float $minRatio=0,float $maxRatio=0):?string
     {
         $file=$_FILES['imagen']??null;
         if(!is_array($file)||($file['error']??UPLOAD_ERR_NO_FILE)===UPLOAD_ERR_NO_FILE){return null;}
@@ -51,6 +68,11 @@ final class AdminCatalogController
         $mime=(new finfo(FILEINFO_MIME_TYPE))->file($tmp);
         $extension=['image/jpeg'=>'jpg','image/png'=>'png','image/webp'=>'webp'][$mime]??null;
         if($extension===null){throw new InvalidArgumentException('Seleccioná una imagen JPG, JPEG, PNG o WebP válida.');}
+        $dimensions=@getimagesize($tmp);
+        if(!is_array($dimensions)){throw new InvalidArgumentException('El archivo no contiene una imagen válida.');}
+        $width=(int)$dimensions[0];$height=(int)$dimensions[1];$ratio=$height>0?$width/$height:0;
+        if(($minWidth>0&&$width<$minWidth)||($minHeight>0&&$height<$minHeight)){throw new InvalidArgumentException("La publicidad debe medir al menos {$minWidth} × {$minHeight} píxeles.");}
+        if(($minRatio>0&&$ratio<$minRatio)||($maxRatio>0&&$ratio>$maxRatio)){throw new InvalidArgumentException('Usá una imagen publicitaria horizontal, con una proporción aproximada de 1920 × 720.');}
         $directory=$this->publicPath.'/'.trim($relativeDirectory,'/');
         if(!is_dir($directory)&&!mkdir($directory,0755,true)){throw new RuntimeException('No se pudo crear la carpeta de imágenes.');}
         $name=bin2hex(random_bytes(16)).'.'.$extension;

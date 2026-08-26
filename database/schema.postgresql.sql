@@ -35,6 +35,15 @@ CREATE TABLE IF NOT EXISTS usuarios (
     CONSTRAINT usuarios_correo_normalizado CHECK (correo = LOWER(TRIM(correo)))
 );
 
+CREATE TABLE IF NOT EXISTS publicidad_portada (
+    id_publicidad SMALLINT PRIMARY KEY DEFAULT 1,
+    imagen VARCHAR(255),
+    texto_alternativo VARCHAR(180) NOT NULL DEFAULT 'Promoción de Despensa Para Todos',
+    activo BOOLEAN NOT NULL DEFAULT TRUE,
+    fecha_actualizacion TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT chk_publicidad_portada_unica CHECK (id_publicidad = 1)
+);
+
 CREATE UNIQUE INDEX IF NOT EXISTS usuarios_correo_unique_ci ON usuarios (LOWER(correo));
 CREATE INDEX IF NOT EXISTS productos_categoria_activo_idx ON productos (id_categoria, activo);
 CREATE INDEX IF NOT EXISTS productos_activo_fecha_idx ON productos (activo, fecha_creacion DESC);

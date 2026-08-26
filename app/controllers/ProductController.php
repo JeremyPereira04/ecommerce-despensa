@@ -6,19 +6,21 @@ final class ProductController
 {
     public function __construct(
         private readonly Product $products,
-        private readonly Category $categories
+        private readonly Category $categories,
+        private readonly Advertisement $advertisement
     ) {
     }
 
     public function home(): void
     {
-        [$featured, $categories, $error] = $this->loadHomeData();
+        [$featured, $categories, $advertisement, $error] = $this->loadHomeData();
         render('home.php', [
             'pageTitle' => 'Tu despensa, más cerca',
             'pageDescription' => 'Productos cotidianos, compra simple y atención cercana.',
             'bodyClass' => 'page-home',
             'featuredProducts' => $featured,
             'categories' => $categories,
+            'advertisement' => $advertisement,
             'dataError' => $error,
         ]);
     }
@@ -72,9 +74,12 @@ final class ProductController
     private function loadHomeData(): array
     {
         try {
-            return [$this->products->featured(), $this->categories->all(), null];
+            $products=$this->products->featured();
+            $categories=$this->categories->all();
         } catch (Throwable) {
-            return [[], [], 'El catálogo no está disponible temporalmente.'];
+            return [[], [], null, 'El catálogo no está disponible temporalmente.'];
         }
+        try{$advertisement=$this->advertisement->active();}catch(Throwable){$advertisement=null;}
+        return [$products,$categories,$advertisement,null];
     }
 }

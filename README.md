@@ -34,6 +34,10 @@ php tests/test_category_images.php
 
 En instalaciones existentes, ejecutá `database/migrations/003_categoria_imagen.sql` antes de usar el formulario administrativo. La migración agrega `categorias.imagen VARCHAR(255)` de forma idempotente. Los archivos se validan en PHP y se guardan bajo `public/assets/images/categories/`; PostgreSQL conserva solamente la ruta relativa.
 
+## Publicidad de portada
+
+Ejecutá `database/migrations/004_publicidad_portada.sql` en instalaciones existentes. El administrador puede cargar desde **Configuración** un banner horizontal (idealmente 1920 × 720 px) que se guarda bajo `public/assets/images/advertising/`; la tabla `publicidad_portada` conserva solamente su ruta relativa, descripción accesible y estado.
+
 ## API administrativa
 
 - `GET /api/admin/dashboard/stats`

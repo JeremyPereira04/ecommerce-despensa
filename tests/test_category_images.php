@@ -22,4 +22,13 @@ assert_category_image(
     'Managed category image paths must be preserved.'
 );
 
+$advertisementFallback = '/Ecommerce-despensa/public/assets/images/advertising/advertising-placeholder.svg';
+assert_category_image(advertisement_image(null) === $advertisementFallback, 'Empty advertisements must use the placeholder.');
+assert_category_image(advertisement_image('../config/database.php') === $advertisementFallback, 'Manipulated advertisement paths must be rejected.');
+assert_category_image(
+    advertisement_image('assets/images/advertising/abcdefabcdefabcdefabcdefabcdefab.webp')
+        === '/Ecommerce-despensa/public/assets/images/advertising/abcdefabcdefabcdefabcdefabcdefab.webp',
+    'Managed advertisement paths must be preserved.'
+);
+
 echo "Category image tests passed.\n";

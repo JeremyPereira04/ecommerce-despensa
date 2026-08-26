@@ -40,6 +40,7 @@ require_once $root . '/app/helpers/view.php';
 require_once $root . '/app/helpers/auth.php';
 require_once $root . '/app/models/Product.php';
 require_once $root . '/app/models/Category.php';
+require_once $root . '/app/models/Advertisement.php';
 require_once $root . '/app/models/Cart.php';
 require_once $root . '/app/models/User.php';
 require_once $root . '/app/controllers/ProductController.php';
@@ -88,8 +89,9 @@ if (is_file($databaseConfig)) {
 
 $productModel = new Product($connection);
 $categoryModel = new Category($connection);
+$advertisementModel = new Advertisement($connection);
 $cartModel = new Cart();
-$productController = new ProductController($productModel, $categoryModel);
+$productController = new ProductController($productModel, $categoryModel, $advertisementModel);
 $cartController = new CartController($cartModel, $productModel);
 $userModel = new User($connection);
 $rateLimiter = new RateLimiter($root . '/storage/rate-limits');
@@ -198,7 +200,7 @@ $getRoutes = [
     'admin-orders' => fn () => $adminOrderController?->index(),
     'admin-order' => fn () => $adminOrderController?->detail(),
     'admin-payment-proof' => fn () => $adminOrderController?->proof(),
-    'admin-settings' => fn () => $renderProtectedAdmin('admin/settings.php', ['pageTitle' => 'Configuración', 'adminSection' => 'settings']),
+    'admin-settings' => fn () => $renderProtectedAdmin('admin/settings.php', ['pageTitle' => 'Configuración', 'adminSection' => 'settings', 'advertisement' => $adminCatalogService?->publicidad()]),
 ];
 
 $postRoutes = [
@@ -213,6 +215,7 @@ $postRoutes = [
     'admin-category-save' => fn () => $adminCatalogController?->guardarCategoria(null),
     'admin-category-update' => fn () => $adminCatalogController?->guardarCategoria((int)($_GET['id']??0)),
     'admin-category-toggle' => fn () => $adminCatalogController?->cambiar('categoria',(int)($_GET['id']??0)),
+    'admin-advertisement-save' => fn () => $adminCatalogController?->guardarPublicidad(),
     'login' => fn () => $authController->loginCustomer(),
     'register' => fn () => $authController->registerCustomer(),
     'logout' => fn () => $authController->logoutCustomer(),

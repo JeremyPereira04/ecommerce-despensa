@@ -1,49 +1,19 @@
-<section class="hero-section">
-    <div class="container">
-        <div class="hero-card">
-            <div class="hero-content">
-                <span class="section-kicker">Variedad para todos los días</span>
-                <h1>Todo lo que necesitás,<br><em>cerca de vos.</em></h1>
-                <p>Encontrá bebidas, alimentos, productos de limpieza y mucho más en un solo lugar.</p>
-                <div class="hero-actions">
-                    <a class="btn btn-primary btn-lg" href="<?= e(url('products')) ?>">Ver productos</a>
-                    <a class="btn btn-outline-primary btn-lg" href="<?= e(url('categories')) ?>">Explorar categorías</a>
-                </div>
-                <ul class="hero-trust" aria-label="Beneficios">
-                    <li><span aria-hidden="true">✓</span> Stock visible</li>
-                    <li><span aria-hidden="true">✓</span> Precios claros</li>
-                    <li><span aria-hidden="true">✓</span> Variedad para todos</li>
-                </ul>
-            </div>
-            <div class="hero-visual" aria-hidden="true">
-                <span class="hero-orbit hero-orbit--one"></span>
-                <span class="hero-orbit hero-orbit--two"></span>
-                <div class="hero-emblem">
-                    <svg viewBox="0 0 120 120"><path d="M24 44h72l-7 52H31l-7-52Z"/><path d="M43 46V34a17 17 0 0 1 34 0v12"/><path d="M60 57v25M47.5 69.5h25"/></svg>
-                    <strong>Para todos</strong>
-                    <small>Todos los días</small>
-                </div>
-            </div>
+<?php
+$advertisementAlt = trim((string)($advertisement['texto_alternativo'] ?? 'Promoción principal de Despensa Para Todos'));
+$advertisementSource = advertisement_image($advertisement['imagen'] ?? null);
+?>
+<section class="home-ad-section" aria-label="Publicidad principal">
+    <div class="home-ad-container">
+        <div class="home-ad-banner">
+            <img src="<?= e($advertisementSource) ?>" alt="<?= e($advertisementAlt) ?>" width="1920" height="720" data-image-fallback="<?= e(asset('assets/images/advertising/advertising-placeholder.svg')) ?>">
         </div>
     </div>
 </section>
 
-<section class="section category-section" aria-labelledby="category-title">
+<section class="home-category-strip" aria-label="Catálogo por categorías">
     <div class="container">
-        <div class="section-heading">
-            <div><span class="section-kicker">Encontrá rápido</span><h2 id="category-title">Comprá por categoría</h2></div>
-            <a href="<?= e(url('categories')) ?>">Ver todas <span aria-hidden="true">→</span></a>
-        </div>
         <?php if (!empty($categories)): ?>
-            <div class="category-grid">
-                <?php foreach (array_slice($categories, 0, 6) as $index => $category): ?>
-                    <a class="category-tile category-tile--<?= ($index % 3) + 1 ?>" href="<?= e(url('products', ['category' => (int) $category['id_categoria']])) ?>">
-                        <span class="category-tile__number"><?= str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT) ?></span>
-                        <span><strong><?= e($category['nombre']) ?></strong><small><?= (int) $category['productos_count'] ?> productos</small></span>
-                        <span class="category-tile__arrow" aria-hidden="true">↗</span>
-                    </a>
-                <?php endforeach; ?>
-            </div>
+            <?php $categoryId=null;$categoryCarouselId='home-categories-title';$categoryCarouselTitle='Explorá nuestras categorías';$categoryCarouselKicker='Catálogo';require __DIR__.'/components/category-carousel.php'; ?>
         <?php else: ?>
             <p class="inline-empty"><?= e($dataError ?? 'Las categorías aparecerán cuando se conecte el catálogo.') ?></p>
         <?php endif; ?>

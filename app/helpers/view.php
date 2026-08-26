@@ -28,6 +28,14 @@ function asset(string $path): string
     return app_base_url() . '/' . ltrim($path, '/');
 }
 
+function versioned_asset(string $path): string
+{
+    $normalized=ltrim($path,'/');
+    $absolute=dirname(__DIR__,2).'/public/'.$normalized;
+    $version=is_file($absolute)?(string)filemtime($absolute):'1';
+    return asset($normalized).'?v='.rawurlencode($version);
+}
+
 function product_image(?string $path): string
 {
     if ($path === null || trim($path) === '') {
@@ -49,6 +57,22 @@ function category_image(?string $path): string
     $normalized = str_replace('\\', '/', trim($path));
     $normalized = preg_replace('#^/?(?:public/)?#', '', $normalized) ?? '';
     if (!preg_match('#^assets/images/categories/[a-zA-Z0-9._-]+$#', $normalized)) {
+        return asset($fallback);
+    }
+
+    return asset($normalized);
+}
+
+function advertisement_image(?string $path): string
+{
+    $fallback = 'assets/images/advertising/advertising-placeholder.svg';
+    if ($path === null || trim($path) === '') {
+        return asset($fallback);
+    }
+
+    $normalized = str_replace('\\', '/', trim($path));
+    $normalized = preg_replace('#^/?(?:public/)?#', '', $normalized) ?? '';
+    if (!preg_match('#^assets/images/advertising/[a-zA-Z0-9._-]+$#', $normalized)) {
         return asset($fallback);
     }
 

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 720" role="img" aria-labelledby="title description">
+  <title id="title">Publicidad principal de Despensa Para Todos</title>
+  <desc id="description">Banner de bienvenida con colores azul marino, amarillo y turquesa</desc>
+  <rect width="1920" height="720" fill="#eef8f7"/>
+  <circle cx="1560" cy="360" r="290" fill="#d9f5f1" stroke="#20b8a6" stroke-width="4"/>
+  <circle cx="1560" cy="360" r="215" fill="#f5b642"/>
+  <circle cx="1735" cy="110" r="120" fill="none" stroke="#0b1f3a" stroke-opacity=".12" stroke-width="3"/>
+  <text x="170" y="205" fill="#20b8a6" font-family="Arial, sans-serif" font-size="34" font-weight="700" letter-spacing="7">DESPENSA PARA TODOS</text>
+  <text x="170" y="330" fill="#0b1f3a" font-family="Arial, sans-serif" font-size="94" font-weight="800">Todo lo que necesitás,</text>
+  <text x="170" y="440" fill="#0b1f3a" font-family="Georgia, serif" font-size="90" font-style="italic">cerca de vos.</text>
+  <text x="170" y="535" fill="#526071" font-family="Arial, sans-serif" font-size="38">Ofertas, variedad y atención cercana todos los días.</text>
+  <g transform="translate(1460 255)" fill="none" stroke="#0b1f3a" stroke-linecap="round" stroke-linejoin="round" stroke-width="18">
+    <path d="M22 80h156l-16 118H38L22 80Z"/>
+    <path d="M68 82V55a32 32 0 0 1 64 0v27"/>
+    <path d="M100 112v52M74 138h52"/>
+  </g>
+</svg>

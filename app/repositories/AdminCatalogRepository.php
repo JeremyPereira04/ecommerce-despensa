@@ -53,4 +53,21 @@ final class AdminCatalogRepository
     {
         $q=$this->db->prepare('UPDATE categorias SET activo=NOT activo WHERE id_categoria=:id');$q->execute(['id'=>$id]);
     }
+
+    public function publicidad(): ?array
+    {
+        $q=$this->db->query('SELECT * FROM publicidad_portada WHERE id_publicidad=1');
+        $row=$q->fetch();
+        return is_array($row)?$row:null;
+    }
+
+    public function guardarPublicidad(array $advertisement): void
+    {
+        $q=$this->db->prepare(
+            'INSERT INTO publicidad_portada(id_publicidad,imagen,texto_alternativo,activo,fecha_actualizacion)
+             VALUES(1,:imagen,:texto_alternativo,:activo,CURRENT_TIMESTAMP)
+             ON CONFLICT(id_publicidad) DO UPDATE SET imagen=EXCLUDED.imagen,texto_alternativo=EXCLUDED.texto_alternativo,activo=EXCLUDED.activo,fecha_actualizacion=CURRENT_TIMESTAMP'
+        );
+        $q->execute($advertisement);
+    }
 }
