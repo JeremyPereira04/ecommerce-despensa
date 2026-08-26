@@ -16,12 +16,7 @@ $advertisementSource = advertisement_image($advertisement['imagen'] ?? null);
             </div>
             <div class="hero-visual" aria-hidden="true">
                 <span class="hero-orbit hero-orbit--one"></span><span class="hero-orbit hero-orbit--two"></span>
-                <div class="hero-product-collage hero-grocery-collage">
-                    <?php foreach (array_slice($heroProducts ?? $featuredProducts ?? [], 0, 6) as $index => $heroProduct): ?>
-                        <img class="hero-product hero-product--<?= $index + 1 ?>" src="<?= e(product_image($heroProduct['imagen'] ?? null)) ?>" alt="" width="360" height="360" data-image-fallback="<?= e(asset('assets/images/product-placeholder.svg')) ?>">
-                    <?php endforeach; ?>
-                    <span class="hero-basket"><i></i><i></i><i></i><i></i><i></i></span>
-                </div>
+                <img class="hero-grocery-art" src="<?= e(asset('assets/images/hero-grocery-basket-final.webp')) ?>" alt="" width="1182" height="832" fetchpriority="high">
             </div>
         </div>
     </div>
