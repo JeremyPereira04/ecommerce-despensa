@@ -31,4 +31,12 @@ assert_category_image(
     'Managed advertisement paths must be preserved.'
 );
 
+$productFallback = '/Ecommerce-despensa/public/assets/images/product-placeholder.svg';
+assert_category_image(product_image('../../config/database.php') === $productFallback, 'Manipulated product paths must be rejected.');
+assert_category_image(
+    product_image('assets/images/products/example.webp')
+        === '/Ecommerce-despensa/public/assets/images/products/example.webp',
+    'Managed product image paths must be preserved.'
+);
+
 echo "Category image tests passed.\n";

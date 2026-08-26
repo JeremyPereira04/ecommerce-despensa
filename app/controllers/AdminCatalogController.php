@@ -7,9 +7,16 @@ final class AdminCatalogController
     public function guardarProducto(?int $id):never
     {
         require_admin();$this->csrf();
-        try{$image=$this->uploadImage('uploads/products',3*1024*1024);$this->service->guardarProducto($_POST,$id,$image);flash('success',$id?'Producto actualizado.':'Producto agregado.');}
-        catch(PDOException $e){error_log('Product persistence: '.$e->getCode());flash('danger',$e->getCode()==='23505'?'El código de barras ya existe.':'No se pudo guardar el producto.');}
-        catch(Throwable $e){flash('danger',$e instanceof InvalidArgumentException?$e->getMessage():'No se pudo guardar el producto.');}
+        $newImage=null;
+        try{
+            $current=$id?$this->service->producto($id):null;
+            $newImage=$this->uploadImage('assets/images/products',2*1024*1024);
+            $this->service->guardarProducto($_POST,$id,$newImage);
+            if($newImage!==null&&!empty($current['imagen'])&&$current['imagen']!==$newImage){$this->deleteManagedFile((string)$current['imagen'],'assets/images/products');$this->deleteManagedFile((string)$current['imagen'],'uploads/products');}
+            flash('success',$id?'Producto actualizado.':'Producto agregado.');
+        }
+        catch(PDOException $e){if($newImage!==null){$this->deleteManagedFile($newImage,'assets/images/products');}error_log('Product persistence: '.$e->getCode());flash('danger',$e->getCode()==='23505'?'El código de barras ya existe.':'No se pudo guardar el producto.');}
+        catch(Throwable $e){if($newImage!==null){$this->deleteManagedFile($newImage,'assets/images/products');}flash('danger',$e instanceof InvalidArgumentException?$e->getMessage():'No se pudo guardar el producto.');}
         header('Location: '.url($id?'admin-product-edit':'admin-product-create',$id?['id'=>$id]:[]),true,303);exit;
     }
     public function guardarCategoria(?int $id):never

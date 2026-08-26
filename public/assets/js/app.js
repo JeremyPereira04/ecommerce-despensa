@@ -50,7 +50,8 @@
             if (previous instanceof HTMLButtonElement) previous.disabled = viewport.scrollLeft <= 8;
             if (next instanceof HTMLButtonElement) next.disabled = viewport.scrollLeft >= maximum - 2;
         };
-        const move = (direction) => viewport.scrollBy({ left: direction * Math.max(220, viewport.clientWidth * .82), behavior: 'smooth' });
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const move = (direction) => viewport.scrollBy({ left: direction * Math.max(220, viewport.clientWidth * .82), behavior: reducedMotion ? 'auto' : 'smooth' });
 
         previous?.addEventListener('click', () => move(-1));
         next?.addEventListener('click', () => move(1));

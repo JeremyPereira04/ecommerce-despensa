@@ -282,9 +282,21 @@
 
     const imageInput = document.querySelector('[data-image-input]');
     const preview = document.querySelector('[data-image-preview]');
+    const productImageError = document.querySelector('[data-product-image-error]');
     imageInput?.addEventListener('change', () => {
         const file = imageInput.files?.[0];
         if (!file || !preview) return;
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+        const maximum = Number(imageInput.dataset.maxSize || 2097152);
+        let message = '';
+        if (!allowedTypes.includes(file.type)) message = 'Seleccioná una imagen JPG, JPEG, PNG o WebP válida.';
+        else if (file.size > maximum) message = 'La imagen debe pesar como máximo 2 MB.';
+        imageInput.setCustomValidity(message);
+        if (productImageError) productImageError.textContent = message;
+        if (message) {
+            imageInput.reportValidity();
+            return;
+        }
         const reader = new FileReader();
         reader.addEventListener('load', () => {
             preview.innerHTML = '';

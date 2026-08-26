@@ -13,7 +13,7 @@
             <input type="hidden" name="page" value="products">
             <div class="filter-search">
                 <label for="catalog-search">Buscar</label>
-                <input class="form-control" id="catalog-search" type="search" name="q" value="<?= e($search) ?>" placeholder="Nombre, marca o descripción">
+                <input class="form-control" id="catalog-search" type="search" name="q" maxlength="120" value="<?= e($search) ?>" placeholder="Nombre, marca, descripción o código">
             </div>
             <div>
                 <label for="category-filter">Categoría</label>

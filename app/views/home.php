@@ -2,10 +2,28 @@
 $advertisementAlt = trim((string)($advertisement['texto_alternativo'] ?? 'Promoción principal de Despensa Para Todos'));
 $advertisementSource = advertisement_image($advertisement['imagen'] ?? null);
 ?>
-<section class="home-ad-section" aria-label="Publicidad principal">
-    <div class="home-ad-container">
-        <div class="home-ad-banner">
-            <img src="<?= e($advertisementSource) ?>" alt="<?= e($advertisementAlt) ?>" width="1920" height="720" data-image-fallback="<?= e(asset('assets/images/advertising/advertising-placeholder.svg')) ?>">
+<section class="hero-section" aria-labelledby="home-hero-title">
+    <div class="container">
+        <div class="hero-card">
+            <div class="hero-content">
+                <span class="section-kicker">Variedad para todos los días</span>
+                <h1 id="home-hero-title">Todo lo que necesitás, <em>cerca de vos.</em></h1>
+                <p>Comprá fácil, recibí rápido.</p>
+                <div class="hero-actions">
+                    <a class="btn btn-primary btn-lg" href="<?= e(url('products')) ?>">Ver productos</a>
+                    <a class="btn btn-outline-primary btn-lg" href="#home-categories-title">Explorar categorías</a>
+                </div>
+                <ul class="hero-trust" aria-label="Beneficios del catálogo"><li><span aria-hidden="true">✓</span>Stock visible</li><li><span aria-hidden="true">✓</span>Precios claros</li><li><span aria-hidden="true">✓</span>Variedad para todos</li></ul>
+            </div>
+            <div class="hero-visual" aria-hidden="true">
+                <span class="hero-orbit hero-orbit--one"></span><span class="hero-orbit hero-orbit--two"></span>
+                <div class="hero-product-collage">
+                    <?php foreach (array_slice($featuredProducts ?? [], 0, 3) as $index => $heroProduct): ?>
+                        <img class="hero-product hero-product--<?= $index + 1 ?>" src="<?= e(product_image($heroProduct['imagen'] ?? null)) ?>" alt="" width="360" height="360" data-image-fallback="<?= e(asset('assets/images/product-placeholder.svg')) ?>">
+                    <?php endforeach; ?>
+                    <span class="hero-shopping-mark"><i class="bi bi-basket2" aria-hidden="true"></i><strong>Para todos</strong><small>todos los días</small></span>
+                </div>
+            </div>
         </div>
     </div>
 </section>
@@ -20,17 +38,19 @@ $advertisementSource = advertisement_image($advertisement['imagen'] ?? null);
     </div>
 </section>
 
-<section class="section section--soft" id="featured-products" aria-labelledby="featured-title">
+<section class="section section--soft" id="featured-products" aria-labelledby="featured-title" data-horizontal-carousel>
     <div class="container">
-        <div class="section-heading">
+        <div class="section-heading home-product-heading">
             <div><span class="section-kicker">Elegidos para vos</span><h2 id="featured-title">Productos destacados</h2></div>
-            <a href="<?= e(url('products')) ?>">Ver catálogo <span aria-hidden="true">→</span></a>
+            <div class="home-product-heading__actions"><a href="<?= e(url('products')) ?>">Ver catálogo <span aria-hidden="true">→</span></a><div class="carousel-controls"><button type="button" data-carousel-previous aria-label="Ver productos anteriores">‹</button><button type="button" data-carousel-next aria-label="Ver productos siguientes">›</button></div></div>
         </div>
         <?php if (!empty($featuredProducts)): ?>
-            <div class="row g-3 g-xl-4">
+            <div class="home-product-viewport" data-carousel-viewport tabindex="0" role="region" aria-label="Productos destacados">
+              <div class="home-product-track">
                 <?php foreach ($featuredProducts as $product): ?>
-                    <div class="col-12 col-sm-6 col-lg-4 col-xl-3"><?php require __DIR__ . '/components/product-card.php'; ?></div>
+                    <div class="home-product-slide"><?php require __DIR__ . '/components/product-card.php'; ?></div>
                 <?php endforeach; ?>
+              </div>
             </div>
         <?php else: ?>
             <?php
@@ -41,6 +61,15 @@ $advertisementSource = advertisement_image($advertisement['imagen'] ?? null);
             require __DIR__ . '/components/empty-state.php';
             ?>
         <?php endif; ?>
+    </div>
+</section>
+
+<section class="offers-section" id="offers-banner" aria-labelledby="offers-title">
+    <div class="container">
+        <div class="offers-banner">
+            <div class="offers-banner__content"><span class="section-kicker">Comprá mejor</span><h2 id="offers-title">Ofertas que rinden más</h2><p>Ahorros para tu día a día</p><a class="btn btn-primary" href="<?= e(url('products')) ?>">Ver ofertas</a></div>
+            <div class="offers-banner__media"><img src="<?= e($advertisementSource) ?>" alt="<?= e($advertisementAlt) ?>" width="1920" height="720" loading="lazy" data-image-fallback="<?= e(asset('assets/images/advertising/advertising-placeholder.svg')) ?>"></div>
+        </div>
     </div>
 </section>
 

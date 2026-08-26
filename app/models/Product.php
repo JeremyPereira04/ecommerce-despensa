@@ -44,7 +44,7 @@ final class Product
         $parameters = [];
 
         if ($search !== '') {
-            $conditions[] = '(p.nombre ILIKE :search OR COALESCE(p.marca, \'\') ILIKE :search OR COALESCE(p.descripcion, \'\') ILIKE :search)';
+            $conditions[] = '(p.nombre ILIKE :search OR COALESCE(p.marca, \'\') ILIKE :search OR COALESCE(p.descripcion, \'\') ILIKE :search OR COALESCE(p.codigo_barra, \'\') ILIKE :search)';
             $parameters[':search'] = '%' . $search . '%';
         }
         if ($categoryId !== null) {

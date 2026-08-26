@@ -38,13 +38,18 @@ function versioned_asset(string $path): string
 
 function product_image(?string $path): string
 {
+    $fallback = 'assets/images/product-placeholder.svg';
     if ($path === null || trim($path) === '') {
-        return asset('assets/images/product-placeholder.svg');
+        return asset($fallback);
     }
 
-    $normalized = preg_replace('#^/?(?:public/)?#', '', trim($path));
+    $normalized = str_replace('\\', '/', trim($path));
+    $normalized = preg_replace('#^/?(?:public/)?#', '', $normalized) ?? '';
+    if (!preg_match('#^(?:assets/images/products|uploads/products)/[a-zA-Z0-9._-]+$#', $normalized)) {
+        return asset($fallback);
+    }
 
-    return asset($normalized ?: 'assets/images/product-placeholder.svg');
+    return asset($normalized);
 }
 
 function category_image(?string $path): string

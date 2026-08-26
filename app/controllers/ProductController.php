@@ -27,7 +27,8 @@ final class ProductController
 
     public function index(): void
     {
-        $search = trim((string) ($_GET['q'] ?? ''));
+        $search = preg_replace('/\s+/u', ' ', trim((string) ($_GET['q'] ?? ''))) ?? '';
+        $search = mb_substr($search, 0, 120);
         $categoryId = filter_input(INPUT_GET, 'category', FILTER_VALIDATE_INT) ?: null;
         $sort = (string) ($_GET['sort'] ?? 'recent');
 
