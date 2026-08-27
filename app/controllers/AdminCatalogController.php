@@ -44,16 +44,28 @@ final class AdminCatalogController
         require_admin();$this->csrf();
         $newImage=null;
         try{
-            $current=$this->service->publicidad();
             $newImage=$this->uploadImage('assets/images/advertising',5*1024*1024,1200,400,1.8,3.2);
             $this->service->guardarPublicidad($_POST,$newImage);
-            if($newImage!==null&&!empty($current['imagen'])&&$current['imagen']!==$newImage){$this->deleteManagedFile((string)$current['imagen'],'assets/images/advertising');}
-            flash('success','Publicidad principal actualizada correctamente.');
+            flash('success','Publicidad agregada al carrusel correctamente.');
         }catch(Throwable $e){
             if($newImage!==null){$this->deleteManagedFile($newImage,'assets/images/advertising');}
             error_log('Advertisement persistence: '.$e->getMessage());
-            flash('danger',$e instanceof InvalidArgumentException?$e->getMessage():'No se pudo guardar la publicidad principal.');
+            flash('danger',$e instanceof InvalidArgumentException?$e->getMessage():'No se pudo agregar la publicidad.');
         }
+        header('Location: '.url('admin-settings'),true,303);exit;
+    }
+    public function cambiarPublicidad(int $id):never
+    {
+        require_admin();$this->csrf();
+        try{$this->service->cambiarPublicidad($id);flash('success','Estado de la publicidad actualizado.');}
+        catch(Throwable $e){error_log('Advertisement toggle: '.$e->getMessage());flash('danger','No se pudo actualizar la publicidad.');}
+        header('Location: '.url('admin-settings'),true,303);exit;
+    }
+    public function eliminarPublicidad(int $id):never
+    {
+        require_admin();$this->csrf();
+        try{$deleted=$this->service->eliminarPublicidad($id);if($deleted){$this->deleteManagedFile((string)($deleted['imagen']??''),'assets/images/advertising');}flash('success','Publicidad eliminada.');}
+        catch(Throwable $e){error_log('Advertisement delete: '.$e->getMessage());flash('danger','No se pudo eliminar la publicidad.');}
         header('Location: '.url('admin-settings'),true,303);exit;
     }
     public function cambiar(string $type,int $id):never{require_admin();$this->csrf();$type==='producto'?$this->service->cambiarProducto($id):$this->service->cambiarCategoria($id);flash('success','Estado actualizado.');header('Location: '.url($type==='producto'?'admin-products':'admin-categories'),true,303);exit;}

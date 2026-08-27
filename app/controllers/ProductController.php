@@ -13,7 +13,7 @@ final class ProductController
 
     public function home(): void
     {
-        [$featured, $heroProducts, $categories, $advertisement, $error] = $this->loadHomeData();
+        [$featured, $heroProducts, $categories, $advertisements, $error] = $this->loadHomeData();
         render('home.php', [
             'pageTitle' => 'Tu despensa, más cerca',
             'pageDescription' => 'Productos cotidianos, compra simple y atención cercana.',
@@ -21,7 +21,7 @@ final class ProductController
             'featuredProducts' => $featured,
             'heroProducts' => $heroProducts,
             'categories' => $categories,
-            'advertisement' => $advertisement,
+            'advertisements' => $advertisements,
             'dataError' => $error,
         ]);
     }
@@ -82,7 +82,7 @@ final class ProductController
         } catch (Throwable) {
             return [[], [], [], null, 'El catálogo no está disponible temporalmente.'];
         }
-        try{$advertisement=$this->advertisement->active();}catch(Throwable){$advertisement=null;}
-        return [$products,$heroProducts,$categories,$advertisement,null];
+        try{$advertisements=$this->advertisement->active();}catch(Throwable){$advertisements=[];}
+        return [$products,$heroProducts,$categories,$advertisements,null];
     }
 }

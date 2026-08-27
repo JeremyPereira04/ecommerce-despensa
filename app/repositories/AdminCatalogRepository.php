@@ -54,20 +54,30 @@ final class AdminCatalogRepository
         $q=$this->db->prepare('UPDATE categorias SET activo=NOT activo WHERE id_categoria=:id');$q->execute(['id'=>$id]);
     }
 
-    public function publicidad(): ?array
+    public function publicidades(): array
     {
-        $q=$this->db->query('SELECT * FROM publicidad_portada WHERE id_publicidad=1');
-        $row=$q->fetch();
-        return is_array($row)?$row:null;
+        return $this->db->query('SELECT * FROM publicidad_portada ORDER BY orden ASC, id_publicidad ASC')->fetchAll();
     }
 
-    public function guardarPublicidad(array $advertisement): void
+    public function publicidad(int $id): ?array
     {
-        $q=$this->db->prepare(
-            'INSERT INTO publicidad_portada(id_publicidad,imagen,texto_alternativo,activo,fecha_actualizacion)
-             VALUES(1,:imagen,:texto_alternativo,:activo,CURRENT_TIMESTAMP)
-             ON CONFLICT(id_publicidad) DO UPDATE SET imagen=EXCLUDED.imagen,texto_alternativo=EXCLUDED.texto_alternativo,activo=EXCLUDED.activo,fecha_actualizacion=CURRENT_TIMESTAMP'
-        );
-        $q->execute($advertisement);
+        $q=$this->db->prepare('SELECT * FROM publicidad_portada WHERE id_publicidad=:id');
+        $q->execute(['id'=>$id]);$row=$q->fetch();return is_array($row)?$row:null;
+    }
+
+    public function guardarPublicidad(array $advertisement): int
+    {
+        $q=$this->db->prepare('INSERT INTO publicidad_portada(imagen,texto_alternativo,orden,activo,fecha_actualizacion) VALUES(:imagen,:texto_alternativo,:orden,:activo,CURRENT_TIMESTAMP) RETURNING id_publicidad');
+        $q->execute($advertisement);return (int)$q->fetchColumn();
+    }
+
+    public function cambiarPublicidad(int $id): void
+    {
+        $q=$this->db->prepare('UPDATE publicidad_portada SET activo=NOT activo,fecha_actualizacion=CURRENT_TIMESTAMP WHERE id_publicidad=:id');$q->execute(['id'=>$id]);
+    }
+
+    public function eliminarPublicidad(int $id): ?array
+    {
+        $q=$this->db->prepare('DELETE FROM publicidad_portada WHERE id_publicidad=:id RETURNING *');$q->execute(['id'=>$id]);$row=$q->fetch();return is_array($row)?$row:null;
     }
 }

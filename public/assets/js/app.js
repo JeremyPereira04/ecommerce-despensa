@@ -64,4 +64,43 @@
         window.addEventListener('resize', updateControls);
         updateControls();
     });
+
+    document.querySelectorAll('[data-advertisement-carousel]').forEach((carousel) => {
+        const slides = [...carousel.querySelectorAll('[data-advertisement-slide]')];
+        const indicators = [...carousel.querySelectorAll('[data-advertisement-indicator]')];
+        const status = carousel.querySelector('[data-advertisement-status]');
+        if (slides.length < 2) return;
+        let current = 0;
+        let timer = 0;
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const interval = Math.max(4000, Number.parseInt(carousel.dataset.interval || '6000', 10));
+        const show = (next) => {
+            current = (next + slides.length) % slides.length;
+            slides.forEach((slide, index) => {
+                const active = index === current;
+                slide.classList.toggle('is-active', active);
+                slide.setAttribute('aria-hidden', String(!active));
+            });
+            indicators.forEach((button, index) => {
+                const active = index === current;
+                button.classList.toggle('is-active', active);
+                button.setAttribute('aria-current', String(active));
+            });
+            if (status) status.textContent = `Publicidad ${current + 1} de ${slides.length}`;
+        };
+        const stop = () => window.clearInterval(timer);
+        const start = () => {
+            stop();
+            if (!reducedMotion && !document.hidden) timer = window.setInterval(() => show(current + 1), interval);
+        };
+        carousel.querySelector('[data-advertisement-previous]')?.addEventListener('click', () => { show(current - 1); start(); });
+        carousel.querySelector('[data-advertisement-next]')?.addEventListener('click', () => { show(current + 1); start(); });
+        indicators.forEach((button) => button.addEventListener('click', () => { show(Number(button.dataset.advertisementIndicator)); start(); }));
+        carousel.addEventListener('mouseenter', stop);
+        carousel.addEventListener('mouseleave', start);
+        carousel.addEventListener('focusin', stop);
+        carousel.addEventListener('focusout', start);
+        document.addEventListener('visibilitychange', start);
+        start();
+    });
 })();

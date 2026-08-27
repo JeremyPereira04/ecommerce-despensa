@@ -200,7 +200,7 @@ $getRoutes = [
     'admin-orders' => fn () => $adminOrderController?->index(),
     'admin-order' => fn () => $adminOrderController?->detail(),
     'admin-payment-proof' => fn () => $adminOrderController?->proof(),
-    'admin-settings' => fn () => $renderProtectedAdmin('admin/settings.php', ['pageTitle' => 'Configuración', 'adminSection' => 'settings', 'advertisement' => $adminCatalogService?->publicidad()]),
+    'admin-settings' => fn () => $renderProtectedAdmin('admin/settings.php', ['pageTitle' => 'Configuración', 'adminSection' => 'settings', 'advertisements' => $adminCatalogService?->publicidades() ?? []]),
 ];
 
 $postRoutes = [
@@ -216,6 +216,8 @@ $postRoutes = [
     'admin-category-update' => fn () => $adminCatalogController?->guardarCategoria((int)($_GET['id']??0)),
     'admin-category-toggle' => fn () => $adminCatalogController?->cambiar('categoria',(int)($_GET['id']??0)),
     'admin-advertisement-save' => fn () => $adminCatalogController?->guardarPublicidad(),
+    'admin-advertisement-toggle' => fn () => $adminCatalogController?->cambiarPublicidad((int)($_GET['id']??0)),
+    'admin-advertisement-delete' => fn () => $adminCatalogController?->eliminarPublicidad((int)($_GET['id']??0)),
     'login' => fn () => $authController->loginCustomer(),
     'register' => fn () => $authController->registerCustomer(),
     'logout' => fn () => $authController->logoutCustomer(),

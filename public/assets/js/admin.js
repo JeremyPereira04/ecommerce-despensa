@@ -168,7 +168,7 @@
         probe.addEventListener('load', () => {
             const ratio = probe.naturalWidth / Math.max(1, probe.naturalHeight);
             if (probe.naturalWidth < 1200 || probe.naturalHeight < 400 || ratio < 1.8 || ratio > 3.2) {
-                message = 'Usá una imagen horizontal de al menos 1200 × 400 px, idealmente 1920 × 720 px.';
+                message = 'Usá una imagen horizontal de al menos 1200 × 400 px, idealmente 1920 × 650 px.';
                 advertisementInput.setCustomValidity(message);
                 if (advertisementError) advertisementError.textContent = message;
                 URL.revokeObjectURL(nextUrl);

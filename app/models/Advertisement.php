@@ -8,20 +8,18 @@ final class Advertisement
     {
     }
 
-    public function active(): ?array
+    public function active(): array
     {
         if ($this->connection === null) {
-            return null;
+            return [];
         }
 
         $statement = $this->connection->query(
-            'SELECT imagen, texto_alternativo
+            'SELECT id_publicidad, imagen, texto_alternativo, orden
              FROM publicidad_portada
-             WHERE id_publicidad = 1 AND activo = TRUE AND imagen IS NOT NULL
-             LIMIT 1'
+             WHERE activo = TRUE AND imagen IS NOT NULL
+             ORDER BY orden ASC, id_publicidad ASC'
         );
-        $row = $statement->fetch(PDO::FETCH_ASSOC);
-
-        return is_array($row) ? $row : null;
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 }

@@ -1,7 +1,4 @@
-<?php
-$advertisementAlt = trim((string)($advertisement['texto_alternativo'] ?? 'Promoción principal de Despensa Para Todos'));
-$advertisementSource = advertisement_image($advertisement['imagen'] ?? null);
-?>
+<?php $advertisements=$advertisements??[]; ?>
 <section class="hero-section" aria-labelledby="home-hero-title">
     <div class="container">
         <div class="hero-card">
@@ -61,39 +58,32 @@ $advertisementSource = advertisement_image($advertisement['imagen'] ?? null);
         <div class="offers-banner">
             <div class="offers-banner__content"><h2 id="offers-title">Ofertas que<br>rinden más</h2><p>Ahorros para tu día a día</p><a class="btn btn-primary" href="<?= e(url('products')) ?>">Ver ofertas</a></div>
             <div class="offers-banner__media">
-                <?php if (!empty($advertisement['imagen'])): ?>
-                    <img src="<?= e($advertisementSource) ?>" alt="<?= e($advertisementAlt) ?>" width="1920" height="720" loading="lazy" data-image-fallback="<?= e(asset('assets/images/advertising/advertising-placeholder.svg')) ?>">
-                <?php else: ?>
-                    <div class="offers-product-collage" aria-hidden="true">
-                        <?php foreach (array_slice($heroProducts ?? $featuredProducts ?? [], 0, 3) as $offerIndex => $offerProduct): ?><img class="offers-product offers-product--<?= $offerIndex + 1 ?>" src="<?= e(product_image($offerProduct['imagen'] ?? null)) ?>" alt="" width="240" height="240" loading="lazy"><?php endforeach; ?>
-                        <span><i></i><i></i><i></i><i></i></span>
-                    </div>
-                <?php endif; ?>
+                <div class="offers-product-collage" aria-hidden="true">
+                    <?php foreach (array_slice($heroProducts ?? $featuredProducts ?? [], 0, 3) as $offerIndex => $offerProduct): ?><img class="offers-product offers-product--<?= $offerIndex + 1 ?>" src="<?= e(product_image($offerProduct['imagen'] ?? null)) ?>" alt="" width="240" height="240" loading="lazy"><?php endforeach; ?>
+                    <span><i></i><i></i><i></i><i></i></span>
+                </div>
             </div>
         </div>
       </aside>
     </div>
 </section>
 
-<?php
-$homeContact = ($GLOBALS['appConfig']['contact'] ?? []);
-$homeLocation = (string) ($homeContact['location'] ?? 'MG37+89G, San Lorenzo 111428');
-$homeMapsUrl = (string) ($homeContact['maps_url'] ?? 'https://www.google.com/maps/search/?api=1&query=MG37%2B89G%2C%20San%20Lorenzo%20111428');
-?>
-<section class="location-section" aria-labelledby="location-title">
-    <div class="footer-container">
-        <div class="location-card">
-            <div class="location-card__content">
-                <span class="section-kicker">Estamos cerca</span>
-                <h2 id="location-title">Encontranos en San Lorenzo</h2>
-                <p>Visitá nuestro local y retirá tu pedido de forma simple.</p>
-                <address><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg><span><?= e($homeLocation) ?></span></address>
-                <a class="btn btn-outline-primary" href="<?= e($homeMapsUrl) ?>" target="_blank" rel="noopener noreferrer">Abrir en Google Maps</a>
+<?php if($advertisements): ?>
+<section class="home-ad-section" aria-label="Publicidades destacadas">
+    <div class="home-ad-container">
+        <div class="home-ad-carousel" data-advertisement-carousel data-interval="6000" aria-roledescription="carrusel">
+            <div class="home-ad-slides">
+                <?php foreach($advertisements as $index=>$item): ?>
+                    <article class="home-ad-slide <?=$index===0?'is-active':''?>" data-advertisement-slide aria-hidden="<?=$index===0?'false':'true'?>"><img src="<?=e(advertisement_image($item['imagen']??null))?>" alt="<?=e($item['texto_alternativo']??'Promoción de Despensa Para Todos')?>" width="1920" height="650" loading="<?=$index===0?'eager':'lazy'?>" data-image-fallback="<?=e(asset('assets/images/advertising/advertising-placeholder.svg'))?>"></article>
+                <?php endforeach; ?>
             </div>
-            <a class="location-map" href="<?= e($homeMapsUrl) ?>" target="_blank" rel="noopener noreferrer" aria-label="Abrir ubicación de Despensa Para Todos en Google Maps">
-                <span class="location-map__pin" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
-                <span class="visually-hidden">Ver ubicación en Google Maps</span>
-            </a>
+            <?php if(count($advertisements)>1): ?>
+                <button class="home-ad-control home-ad-control--previous" type="button" data-advertisement-previous aria-label="Publicidad anterior"><i class="bi bi-chevron-left"></i></button>
+                <button class="home-ad-control home-ad-control--next" type="button" data-advertisement-next aria-label="Publicidad siguiente"><i class="bi bi-chevron-right"></i></button>
+                <div class="home-ad-indicators" aria-label="Elegir publicidad"><?php foreach($advertisements as $index=>$item): ?><button class="<?=$index===0?'is-active':''?>" type="button" data-advertisement-indicator="<?=$index?>" aria-label="Ver publicidad <?=$index+1?>" aria-current="<?=$index===0?'true':'false'?>"></button><?php endforeach; ?></div>
+            <?php endif; ?>
+            <span class="visually-hidden" aria-live="polite" data-advertisement-status>Publicidad 1 de <?=count($advertisements)?></span>
         </div>
     </div>
 </section>
+<?php endif; ?>
