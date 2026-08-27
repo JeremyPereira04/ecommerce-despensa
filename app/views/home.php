@@ -58,10 +58,8 @@
         <div class="offers-banner">
             <div class="offers-banner__content"><h2 id="offers-title">Ofertas que<br>rinden más</h2><p>Ahorros para tu día a día</p><a class="btn btn-primary" href="<?= e(url('products')) ?>">Ver ofertas</a></div>
             <div class="offers-banner__media">
-                <div class="offers-product-collage" aria-hidden="true">
-                    <?php foreach (array_slice($heroProducts ?? $featuredProducts ?? [], 0, 3) as $offerIndex => $offerProduct): ?><img class="offers-product offers-product--<?= $offerIndex + 1 ?>" src="<?= e(product_image($offerProduct['imagen'] ?? null)) ?>" alt="" width="240" height="240" loading="lazy"><?php endforeach; ?>
-                    <span><i></i><i></i><i></i><i></i></span>
-                </div>
+                <img class="offers-basket-art" src="<?=e(asset('assets/images/hero-grocery-basket-final.webp'))?>" alt="" width="1182" height="832" loading="lazy">
+                <span class="offers-discount" aria-hidden="true"><i class="bi bi-percent"></i></span>
             </div>
         </div>
       </aside>
